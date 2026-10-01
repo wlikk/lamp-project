@@ -1,8 +1,18 @@
 services:
-  web:
-    build: .
+  nginx:
+    build: ./nginx
     ports:
       - "8080:80"
+    depends_on:
+      - web
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/html:/usr/share/nginx/html:ro
+
+  web:
+    build: .
+    expose:
+      - "80"
     depends_on:
       db:
         condition: service_healthy
